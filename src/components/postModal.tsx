@@ -26,7 +26,7 @@ function PostModal() {
         dispatch(clearPost())
       }}
     >
-      <div className="w-1/2">
+      <div className="w-full lg:w-1/2">
         {post.type === "edit" && (
           <PostForm
             customBTN={
@@ -51,11 +51,11 @@ function PostModal() {
           />
         )}
         {post.type === "delete" && (
-          <div className="flex bg-white p-10 rounded-xl justify-between items-baseline">
+          <div className="flex flex-col bg-white p-4 rounded-xl justify-between items-baseline">
             <label className="font-bold text-xl">
               Are you sure you want to delete this item?
             </label>
-            <div className="">
+            <div className="flex w-full justify-end mt-4">
               <button
                 onClick={handleCancel}
                 className="btn btn-info mr-4"
