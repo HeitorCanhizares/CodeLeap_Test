@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#intro {
+  width: 0px;
+  opacity: 0;
+  animation: fadeInOutScale 2s;
+}
+
+@keyframes fadeInOutScale {
+  0% {
+    width: 100%;
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
