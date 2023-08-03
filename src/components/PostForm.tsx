@@ -4,7 +4,11 @@ import { useForm } from "react-hook-form"
 import * as yup from "yup"
 import { selectUser } from "../actions/userSlice"
 import { useEffect, useState } from "react"
-import { useAddPostMutation, useUpdatePostMutation } from "../actions/postAPI"
+import {
+  postApi,
+  useAddPostMutation,
+  useUpdatePostMutation,
+} from "../actions/postAPI"
 import { clearPost, selectPost } from "../actions/postSlice"
 
 const schema = yup.object({
@@ -35,9 +39,13 @@ function PostForm(props: postFormProps) {
       updatePost({ id: post.post?.id, ...data }).finally(() => {
         dispatch(clearPost())
         window.post_modal.close()
+        dispatch(postApi.util.resetApiState())
       })
     } else {
-      addPost({ ...data, username: user.user as string }).finally(() => reset())
+      addPost({ ...data, username: user.user as string }).finally(() => {
+        reset()
+        dispatch(postApi.util.resetApiState())
+      })
     }
   }
   useEffect(() => {

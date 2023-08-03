@@ -1,4 +1,4 @@
-import { useDeletePostMutation } from "../actions/postAPI"
+import { postApi, useDeletePostMutation } from "../actions/postAPI"
 import { clearPost, selectPost } from "../actions/postSlice"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import PostForm from "./PostForm"
@@ -13,9 +13,11 @@ function PostModal() {
     window.post_modal.close()
   }
   const handleOkay = () => {
-    deletePost({ id: post.post?.id as number })
-    dispatch(clearPost())
-    window.post_modal.close()
+    deletePost({ id: post.post?.id as number }).finally(() => {
+      dispatch(clearPost())
+      window.post_modal.close()
+      dispatch(postApi.util.resetApiState())
+    })
   }
 
   return (
