@@ -73,8 +73,10 @@ function PostList() {
             </div>
           </div>
           <div className="flex justify-between p-4">
-            <label>@{post.username}</label>
-            <label>{timeAgo(post.created_datetime)}</label>
+            <label className="break-words">@{post.username}</label>
+            <label className="break-words">
+              {timeAgo(post.created_datetime)}
+            </label>
           </div>
           <div className="p-4 break-words">{post.content}</div>
         </div>
