@@ -10,18 +10,12 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false)
-    }, 3000)
+    }, 2500)
   }, [])
 
   return (
-    <div
-      className="flex min-w-full min-h-screen bg-neutral-300 overflow-hidden"
-      data-theme="light"
-    >
-      <div
-        className="flex flex-col self-center items-center w-full "
-        id="intro"
-      >
+    <div className="flex bg-neutral-300 h-screen" data-theme="light">
+      <div className="flex flex-col self-center items-center w-full" id="intro">
         <img src="/codeleap_logo_black.svg" alt="codeleap logo" />
       </div>
       {!loading && <>{user.user === null ? <SignUp /> : <MainScreen />}</>}

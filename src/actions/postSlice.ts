@@ -1,33 +1,34 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "../redux/store"
-import { postInterface } from "./postAPI"
+import { postInterface, PostState } from "../types"
 
-export interface postModal {
-  post: postInterface | null
-  type: "edit" | "delete" | null
-}
-
-const initialState: postModal = { post: null, type: null }
+const initialState: PostState = { post: null, type: null, page: 0 }
 
 export const postSlice = createSlice({
-  name: "user",
+  name: "post",
   initialState,
   reducers: {
     setPost: (state, action: PayloadAction<postInterface>) => {
       state.post = action.payload
     },
     setType: (state, action: PayloadAction<"edit" | "delete">) => {
-      localStorage.removeItem("user")
       state.type = action.payload
     },
-    clear: (state) => {
+    clearPost: (state) => {
       state.post = null
       state.type = null
+    },
+    pageIncrement: (state) => {
+      state.page = state.page + 1
+    },
+    pageReset: (state) => {
+      if (state.page - 1 > -1) state.page -= 1
     },
   },
 })
 
-export const { setPost, setType, clear } = postSlice.actions
+export const { setPost, setType, clearPost, pageReset, pageIncrement } =
+  postSlice.actions
 
 export const selectPost = (state: RootState) => state.post
 

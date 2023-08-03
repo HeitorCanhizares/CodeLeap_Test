@@ -24,7 +24,7 @@ function LoginForm() {
 
   return (
     <form
-      className="form-control p-6 rounded-xl shadow-2xl bg-white w-1/3"
+      className="form-control p-6 rounded-xl shadow-2xl bg-white w-full  md:w-1/2 lg:w-1/3"
       onSubmit={handleSubmit(onSubmit)}
     >
       <label className="font-black text-black text-xl">

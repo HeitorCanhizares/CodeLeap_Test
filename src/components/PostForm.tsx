@@ -2,9 +2,10 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import * as yup from "yup"
-import { login, selectUser } from "../actions/userSlice"
-import { useState } from "react"
-import { useAddPostMutation } from "../actions/postAPI"
+import { selectUser } from "../actions/userSlice"
+import { useEffect, useState } from "react"
+import { useAddPostMutation, useUpdatePostMutation } from "../actions/postAPI"
+import { clearPost, selectPost } from "../actions/postSlice"
 
 const schema = yup.object({
   title: yup.string().required(),
@@ -21,16 +22,32 @@ function PostForm(props: postFormProps) {
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
   const user = useAppSelector(selectUser)
+  const post = useAppSelector(selectPost)
   const [addPost] = useAddPostMutation()
+  const [updatePost] = useUpdatePostMutation()
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, reset } = useForm<FormData>({
+  const { register, handleSubmit, reset, setValue } = useForm<FormData>({
     resolver: yupResolver(schema),
   })
   const OnSubmit = (data: FormData) => {
-    let dataString = { ...data, username: user.user as string }
-    addPost(dataString).finally(() => reset())
+    if (post.type === "edit") {
+      updatePost({ id: post.post?.id, ...data }).finally(() => {
+        dispatch(clearPost())
+        window.post_modal.close()
+      })
+    } else {
+      addPost({ ...data, username: user.user as string }).finally(() => reset())
+    }
   }
+  useEffect(() => {
+    if (post.post) {
+      setValue("title", post.post.title)
+      setValue("content", post.post.content)
+    } else {
+      reset()
+    }
+  }, [post])
 
   return (
     <form

@@ -1,43 +1,79 @@
-import { clear, selectPost } from "../actions/postSlice"
+import { useDeletePostMutation } from "../actions/postAPI"
+import { clearPost, selectPost } from "../actions/postSlice"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import PostForm from "./PostForm"
 
-declare global {
-  interface Window {
-    post_modal: HTMLDialogElement
-  }
-}
-
 function PostModal() {
   const post = useAppSelector(selectPost)
+  const [deletePost] = useDeletePostMutation()
   const dispatch = useAppDispatch()
+
+  const handleCancel = () => {
+    dispatch(clearPost())
+    window.post_modal.close()
+  }
+  const handleOkay = () => {
+    deletePost({ id: post.post?.id as number })
+    dispatch(clearPost())
+    window.post_modal.close()
+  }
+
   return (
     <dialog
       id="post_modal"
       className="modal"
       onClose={() => {
-        dispatch(clear())
+        dispatch(clearPost())
       }}
     >
-      <form method="dialog" className="w-1/2">
+      <div className="w-1/2">
         {post.type === "edit" && (
           <PostForm
             customBTN={
-              <>
-                <button className="btn">Cancel</button>
+              <div className="self-end mt-4">
+                <button
+                  onClick={handleCancel}
+                  className="btn btn-info mr-4"
+                  type="button"
+                >
+                  Cancel
+                </button>
                 <button
                   className={`btn ${
                     post.type === "edit" ? "btn-success" : "btn-error"
                   }`}
+                  type="submit"
                 >
                   {post.type === "edit" ? "save" : "delete"}
                 </button>
-              </>
+              </div>
             }
           />
         )}
-        <div className="modal-action"></div>
-      </form>
+        {post.type === "delete" && (
+          <div className="flex bg-white p-10 rounded-xl justify-between items-baseline">
+            <label className="font-bold text-xl">
+              Are you sure you want to delete this item?
+            </label>
+            <div className="">
+              <button
+                onClick={handleCancel}
+                className="btn btn-info mr-4"
+                type="button"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleOkay}
+                className="btn btn-error"
+                type="submit"
+              >
+                delete
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </dialog>
   )
 }

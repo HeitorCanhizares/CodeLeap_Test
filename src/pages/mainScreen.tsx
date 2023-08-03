@@ -5,14 +5,15 @@ import PostModal from "../components/postModal"
 
 function MainScreen() {
   return (
-    <div className="flex flex-col w-full">
-      <nav>
+    <div className="flex flex-col w-full overflow-scroll">
+      <div id="top"></div>
+      <nav className="fixed w-full">
         <Navbar />
       </nav>
-      <section>
+      <section className="mt-20">
         <PostForm />
       </section>
-      <section className="flex flex-col items-center p-4">
+      <section>
         <PostList />
       </section>
       <PostModal />

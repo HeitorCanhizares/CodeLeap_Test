@@ -1,14 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "../redux/store"
+import { UserState } from "../types"
 
 const userLocal = localStorage.getItem("user")
 
-export interface UserState {
-  user: string | null
-}
-
 const initialState: UserState = {
   user: userLocal ? userLocal : null,
+  view: "your",
 }
 
 export const userSlice = createSlice({
@@ -23,10 +21,17 @@ export const userSlice = createSlice({
       localStorage.removeItem("user")
       state.user = null
     },
+    view: (state) => {
+      if (state.view === "all") {
+        state.view = "your"
+      } else {
+        state.view = "all"
+      }
+    },
   },
 })
 
-export const { login, logout } = userSlice.actions
+export const { login, logout, view } = userSlice.actions
 
 export const selectUser = (state: RootState) => state.user
 
